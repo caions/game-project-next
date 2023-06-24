@@ -1,9 +1,10 @@
 "use client";
 
-import Card from "@/components/Card";
+import { useEffect, useState } from "react";
 import axios, { AxiosHeaders } from "axios";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import Card from "@/components/Card";
+import Dropdown from "@/components/DropDown";
 
 export interface Game {
   id: number;
@@ -22,10 +23,21 @@ export interface Game {
 export default function Home() {
   const [games, setGames] = useState<Game[]>([]);
   const [search, setSearch] = useState<string>();
+  const [gameGenre, setGameGenre] = useState("");
 
-  const filteredGames = games.filter((g) =>
-    g.title.toLowerCase().includes(search || "")
-  );
+  const filteredGames = games.filter((game) => {
+    if (!gameGenre && !search) {
+      return game;
+    }
+    if (search) {
+      return game.title.toLowerCase().includes(search || "");
+    }
+    return game.genre === gameGenre;
+  });
+
+  useEffect(() => {
+    if(gameGenre) setSearch("");
+  }, [gameGenre]);
 
   useEffect(() => {
     const headers = new AxiosHeaders({ "dev-email-address": "dev@email.com" });
@@ -60,7 +72,6 @@ export default function Home() {
     .filter((genre, index, self) => {
       return index === self.indexOf(genre);
     });
-  console.log(gamesGenres)
 
   return (
     <>
@@ -93,16 +104,19 @@ export default function Home() {
         </div>
         <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
           <div className="text-sm lg:flex-grow">
-            <a
-              href="#responsive-header"
-              className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white"
-            >
-              Blog
-            </a>
+            <Dropdown
+              option={["Todos", ...gamesGenres]}
+              selectedValue={(option) => {
+                setGameGenre(option === "Todos" ? "" : option)
+              }
+              }
+              resetFilter={search !== ""}
+            />
           </div>
           <div>
             <div className="mb-4">
               <input
+                value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="searchgame"
@@ -122,6 +136,9 @@ export default function Home() {
               title={game.title}
               description={game.short_description}
               category={game.genre}
+              onClick={() => {
+                setGameGenre(game.genre);
+              }}
             />
           ))}
         </div>
