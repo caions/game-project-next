@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Card from "@/components/Card";
+import Image from "next/image";
 import Dropdown from "@/components/DropDown";
 import useApi from "@/hooks/useApi";
+import logoApp from "../../public/logo-appmasters.svg";
 
 export interface Game {
   id: number;
@@ -48,7 +50,7 @@ export default function Home() {
       return game;
     }
     if (search) {
-      return game.title.toLowerCase().includes(search || "");
+      return game.title.toLowerCase().includes(search.trim() || "");
     }
     return game.genre === gameGenre;
   });
@@ -62,31 +64,32 @@ export default function Home() {
       ?.map((game) => game.genre)
       .filter((genre, index, self) => {
         return index === self.indexOf(genre);
-      }) || [];
+      })
+      .sort() || [];
 
   const renderBody = () => {
     if (isLoading) {
-      return <h1>Loading...</h1>
+      return <h1>Loading...</h1>;
     }
     if (error) {
-      return <h1>{error}</h1>
+      return <h1>{error}</h1>;
     }
 
     return (
       <>
-        <nav className="flex items-center justify-between flex-wrap bg-teal-500 p-6">
+        <nav className="flex items-center justify-between flex-wrap bg-teal-500 px-24 py-1">
           <div className="flex items-center flex-shrink-0 text-white mr-6">
-            <svg
-              className="fill-current h-8 w-8 mr-2"
-              width="54"
-              height="54"
-              viewBox="0 0 54 54"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" />
-            </svg>
-            <span className="font-semibold text-xl tracking-tight">
-              Tailwind CSS
+            <Image
+              style={{
+                filter: "grayscale(1) brightness(0) invert(1)",
+              }}
+              priority
+              width={250}
+              src={logoApp}
+              alt="logo"
+            />
+            <span className="text-[27px] font-semibold ml-2 mb-1 col-[#fcfcfc]">
+              Games
             </span>
           </div>
           <div className="block lg:hidden">
@@ -101,31 +104,29 @@ export default function Home() {
               </svg>
             </button>
           </div>
-          <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-            <div className="text-sm lg:flex-grow">
-              <Dropdown
-                option={["Todos", ...gamesGenres]}
-                selectedValue={(option) =>
-                  setGameGenre(option === "Todos" ? "" : option)
-                }
-                resetFilter={search !== ""}
-              />
-            </div>
+          <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto justify-end">
             <div>
-              <div className="mb-4">
-                <input
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="searchgame"
-                  type="text"
-                  placeholder="Procurar um jogo"
-                />
-              </div>
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="searchgame"
+                type="text"
+                placeholder="Procurar um jogo"
+              />
             </div>
           </div>
         </nav>
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
+        <main className="flex flex-col items-center justify-between p-24 pt-4">
+          <div className="text-sm lg:flex-grow self-end mb-5">
+            <Dropdown
+              option={["Todos", ...gamesGenres]}
+              selectedValue={(option) =>
+                setGameGenre(option === "Todos" ? "" : option)
+              }
+              resetFilter={search !== ""}
+            />
+          </div>
           <div className="grid grid-cols-3 gap-4">
             {filteredGames?.map((game) => (
               <Card
