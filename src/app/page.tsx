@@ -121,7 +121,7 @@ export default function Home() {
 
     return (
       <>
-        <nav className="flex items-center md:justify-between justify-center flex-wrap bg-teal-500 px-24 py-1">
+        <nav className="flex items-center md:justify-between justify-center flex-wrap bg-[#000066] px-24 py-1">
           <div className="flex items-center flex-shrink-0 text-white mr-6 w-60 mt-1">
             <Image
               style={{
