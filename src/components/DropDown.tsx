@@ -17,7 +17,7 @@ const Dropdown: React.FC<DropdownProps> = ({ option, selectedValue, resetFilter 
   useEffect(()=>{
     if(resetFilter){
       selectedValue("")
-      setSelectedOption('Todos')
+      setSelectedOption('Genres')
     }
   },[resetFilter])
 
@@ -30,7 +30,7 @@ const Dropdown: React.FC<DropdownProps> = ({ option, selectedValue, resetFilter 
 
   const selectedOptionLabel = selectedOption
     ? options.find((option) => option.value === selectedOption)?.label || ""
-    : "Todos";
+    : "Genres";
 
   return (
     <div className="relative inline-block text-left w-40">
@@ -67,7 +67,7 @@ const Dropdown: React.FC<DropdownProps> = ({ option, selectedValue, resetFilter 
       {isOpen && (
         <div className="origin-top-right absolute right-0 mt-2 w-full rounded-md shadow-lg">
           <div
-            className="rounded-md bg-gray-900 shadow-xs"
+            className="rounded-md bg-gray-900 shadow-xs relative z-10"
             style={{ maxHeight: "200px", overflowY: "auto" }}
           >
             <div

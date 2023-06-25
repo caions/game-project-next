@@ -6,6 +6,7 @@ import Image from "next/image";
 import Dropdown from "@/components/DropDown";
 import useApi from "@/hooks/useApi";
 import logoApp from "../../public/logo-appmasters.svg";
+import FlipCard from "@/components/FlipCard";
 
 export interface Game {
   id: number;
@@ -60,7 +61,7 @@ export default function Home() {
   }, [gameGenre]);
 
   const gamesGenres = [
-    "Todos",
+    "Genres",
     ...(games
       ?.map((game) => game.genre)
       .filter((genre, index, self) => {
@@ -103,7 +104,7 @@ export default function Home() {
                 onChange={(e) => setSearch(e.target.value)}
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 type="text"
-                placeholder="Procurar"
+                placeholder="Search"
               />
             </div>
             <div className="absolute top-4 right-8">
@@ -166,7 +167,7 @@ export default function Home() {
                         <span
                           className={`hover:text-sky-500`}
                           onClick={() => {
-                            setGameGenre(game === "Todos" ? "" : game);
+                            setGameGenre(game === "Genres" ? "" : game);
                           }}
                         >
                           {game}
@@ -184,19 +185,31 @@ export default function Home() {
             <Dropdown
               option={gamesGenres}
               selectedValue={(option) =>
-                setGameGenre(option === "Todos" ? "" : option)
+                setGameGenre(option === "Genres" ? "" : option)
               }
               resetFilter={search !== ""}
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-max">
             {filteredGames?.map((game) => (
-              <Card
+              <FlipCard
                 key={game.id}
-                image={game.thumbnail}
-                title={game.title}
-                description={game.short_description}
-                category={game.genre}
+                front={
+                  <Card
+                    key={game.id}
+                    image={game.thumbnail}
+                    title={game.title}
+                    category={game.genre}
+                  />
+                }
+                back={
+                  <Card
+                    key={game.id}
+                    title={game.title}
+                    description={game.short_description}
+                    play={game.game_url}
+                  />
+                }
               />
             ))}
           </div>
