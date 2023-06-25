@@ -6,7 +6,7 @@ type Card = {
   title: string;
   description: string;
   category: string;
-  onClick: ()=>void
+  onClick?: ()=>void
 };
 
 const Card: React.FC<Card> = ({ image, title, description, category, onClick }) => {
@@ -20,7 +20,7 @@ const Card: React.FC<Card> = ({ image, title, description, category, onClick }) 
         </div>
       </div>
       <div className="px-6 pt-4 pb-2">
-        <span onClick={onClick} className="cursor-pointer inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+        <span onClick={onClick} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
           {category}
         </span>
       </div>
