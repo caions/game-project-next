@@ -32,7 +32,7 @@ const Navbar: React.FC<NavbarProps> = ({
           alt="logo"
         />
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center  my-3">
         <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto justify-end">
           <input
             value={search}
