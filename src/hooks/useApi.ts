@@ -41,7 +41,7 @@ const useApi = <T>(url: string): ApiResponse<T> => {
           });
           return;
         }
-        setResponse({ data: null, error: 'Erro desconhecido.', isLoading: false });
+        setResponse({ data: null, error: 'Erro desconhecido, tente recarregar a página.', isLoading: false });
       }
     };
 

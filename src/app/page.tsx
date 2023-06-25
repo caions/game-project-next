@@ -6,6 +6,8 @@ import Image from "next/image";
 import Dropdown from "@/components/DropDown";
 import useApi from "@/hooks/useApi";
 import logoApp from "../../public/logo-appmasters.svg";
+import crash from "../../public/crash.svg";
+import spinner from "../../public/spinner.svg";
 import FlipCard from "@/components/FlipCard";
 
 export interface Game {
@@ -78,10 +80,43 @@ export default function Home() {
 
   const renderBody = () => {
     if (isLoading) {
-      return <h1>Loading...</h1>;
+      return (
+        <div
+          aria-label="Loading..."
+          role="status"
+          className="flex items-center space-x-2 justify-center h-screen"
+        >
+          <Image
+            className="h-7 w-7 animate-spin stroke-gray-500"
+            style={{
+              filter: "grayscale(1) brightness(0) invert(1)",
+            }}
+            priority
+            src={spinner}
+            alt="logo"
+          />
+          <span className="text-md font-medium">Loading...</span>
+        </div>
+      );
     }
     if (error) {
-      return <h1>{error}</h1>;
+      return (
+        <div
+          role="status"
+          className="flex items-center space-x-2 justify-center h-screen flex-col"
+        >
+          <Image
+            className="h-12 w-12"
+            style={{
+              filter: "grayscale(1) brightness(0) invert(1)",
+            }}
+            priority
+            src={crash}
+            alt="logo"
+          />
+          <span className="mt-2 text-xl font-medium">{error}</span>
+        </div>
+      );
     }
 
     return (
