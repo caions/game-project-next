@@ -21,7 +21,7 @@ const Navbar: React.FC<NavbarProps> = ({
   toggleSidebar,
 }) => {
   return (
-    <nav className="flex items-center md:justify-between justify-center flex-wrap bg-[#000066] px-24 py-1">
+    <nav className="flex items-center md:justify-between justify-center flex-wrap bg-blue-950 px-24 py-1">
       <div className="flex items-center flex-shrink-0 text-white mr-6 w-60 mt-1">
         <Image
           style={{
@@ -45,7 +45,7 @@ const Navbar: React.FC<NavbarProps> = ({
         <div className="absolute top-4 right-8">
           <div className="block lg:hidden">
             <button
-              className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white"
+              className="flex items-center px-3 py-2 border rounded text-blue-200 border-blue-400 hover:text-white hover:border-white"
               onClick={toggleSidebar}
             >
               <svg

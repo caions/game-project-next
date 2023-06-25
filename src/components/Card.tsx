@@ -19,7 +19,7 @@ const Card: React.FC<Card> = ({
   onClick,
 }) => {
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg flex flex-col place-content-between hover:bg-[#27282e]">
+    <div className="max-w-sm rounded overflow-hidden shadow-lg flex bg-blue-950 flex-col place-content-between">
       <div className="card-content" style={{ height: "250px" }}>
         {image && <Image src={image} alt="img" width={700} height={700} />}
         <div className="px-6 py-4">
