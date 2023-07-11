@@ -1,5 +1,5 @@
-import {Login} from "@/components/Login";
+import {AuthComponent} from "@/components/AuthComponent";
 
 export default function Auth() {
-  return <Login />
+  return <AuthComponent />
 }
