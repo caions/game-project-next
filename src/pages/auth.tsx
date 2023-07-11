@@ -1,5 +1,5 @@
-import { Signup } from "@/components/Signup";
+import {Login} from "@/components/Login";
 
 export default function Auth() {
-  return <Signup />
+  return <Login />
 }
