@@ -1,5 +1,8 @@
 import Image from "next/image";
 import logoApp from "../../public/logo-appmasters.svg";
+import { auth } from "@/config/firebase";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import { useRouter } from "next/router";
 
 interface NavbarProps {
   search: string | undefined;
@@ -20,6 +23,20 @@ const Navbar: React.FC<NavbarProps> = ({
   showSidebar,
   toggleSidebar,
 }) => {
+  const authenticated = useAuthContext();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    auth
+      .signOut()
+      .then(() => {
+        console.log("deslogado");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <nav className="flex items-center md:justify-between justify-center flex-wrap bg-blue-950 px-24 py-1">
       <div className="flex items-center flex-shrink-0 text-white mr-6 w-60 mt-1">
@@ -37,9 +54,9 @@ const Navbar: React.FC<NavbarProps> = ({
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded min-w-[240px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text"
-            placeholder="Search"
+            placeholder="Search a game"
           />
         </div>
         <div className="absolute top-4 right-8">
@@ -62,9 +79,7 @@ const Navbar: React.FC<NavbarProps> = ({
             className={`fixed z-50 inset-0 lg:hidden
              ${showSidebar ? "" : "hidden"}`}
           >
-            <div
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm"
-            ></div>
+            <div className="fixed inset-0 bg-black/20 backdrop-blur-sm"></div>
             <div
               className={`fixed top-4 right-4 w-full max-w-[17rem] bg-white rounded-lg shadow-lg p-6 text-base font-semibold text-slate-900 h-[87vh] overflow-scroll`}
             >
@@ -111,8 +126,16 @@ const Navbar: React.FC<NavbarProps> = ({
               </ul>
             </div>
           </div>
-        </div>
+        </div>             
       </div>
+      <div className="flex items-center  my-3">
+        {!!authenticated ? (
+          <>
+          <button className="mr-2" onClick={()=>{}}>Favorites</button>
+          <button onClick={handleLogout}>Logout</button>
+          </>
+        ) : <button onClick={()=>router.push('/auth')}>Login</button>}
+        </div>   
     </nav>
   );
 };

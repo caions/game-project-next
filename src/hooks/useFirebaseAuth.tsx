@@ -15,7 +15,6 @@ export const useFireBaseAuth = (email: string, password: string) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(user);
         console.log("Usuário cadastrado com sucesso!");
         router.push("/");
       })
@@ -33,7 +32,6 @@ export const useFireBaseAuth = (email: string, password: string) => {
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("Usuario logado com sucesso");
-        console.log(user);
         router.push("/");
       })
       .catch((error) => {
