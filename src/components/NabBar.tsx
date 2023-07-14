@@ -129,12 +129,9 @@ const Navbar: React.FC<NavbarProps> = ({
         </div>             
       </div>
       <div className="flex items-center  my-3">
-        {!!authenticated ? (
-          <>
-          <button className="mr-2" onClick={()=>{}}>Favorites</button>
+        {!!authenticated ? 
           <button onClick={handleLogout}>Logout</button>
-          </>
-        ) : <button onClick={()=>router.push('/auth')}>Login</button>}
+        : <button onClick={()=>router.push('/auth')}>Login</button>}
         </div>   
     </nav>
   );

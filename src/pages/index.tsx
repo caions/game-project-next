@@ -7,8 +7,11 @@ import FlipCard from "@/components/FlipCard";
 import Navbar from "@/components/NabBar";
 import LoadingComponent from "@/components/LoadingComponent";
 import ErrorComponent from "@/components/ErrorComponent";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import { Unsubscribe } from "firebase/firestore";
+import { useGetFavoriteGames } from "@/services/favoriteGame";
 
-interface Game {
+export interface Game {
   id: number;
   title: string;
   thumbnail: string;
@@ -24,7 +27,10 @@ interface Game {
 
 export default function Home() {
   const [search, setSearch] = useState<string>();
+  const authenticated = useAuthContext()
+  const favoriteGameIds = useGetFavoriteGames(authenticated?.uid);  
   const [gameGenre, setGameGenre] = useState("");
+  const [filterFavorites,setFilterFavorites] = useState(false)
   const {
     data: games,
     error,
@@ -46,7 +52,22 @@ export default function Home() {
     return 0;
   });
 
-  const filteredGames = sortedGames?.filter((game) => {
+  const mapedGames = sortedGames?.map(game => {
+    const isFavorite = favoriteGameIds.includes(game.id);
+    return {
+      ...game,
+      favorite: isFavorite,
+    };
+  });
+
+  const filterByFavorites = (game: Game & {favorite:boolean}) => {
+    if (filterFavorites) {
+      return game.favorite;
+    }
+    return game;
+  }
+  
+  const filterByGenreOrSearch = (game: Game) =>{
     if (!gameGenre && !search) {
       return game;
     }
@@ -54,7 +75,11 @@ export default function Home() {
       return game.title.toLowerCase().includes(search.trim() || "");
     }
     return game.genre === gameGenre;
-  });
+  }
+
+  const filteredGames = 
+  mapedGames?.filter(filterByFavorites).filter(filterByGenreOrSearch);
+
 
   useEffect(() => {
     if (gameGenre) setSearch("");
@@ -95,25 +120,23 @@ export default function Home() {
               }
               resetFilter={search !== ""}
             />
+            <button className="mr-2" onClick={()=>setFilterFavorites(!filterFavorites)}>Favorites</button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-max">
             {filteredGames?.map((game) => (
+              
               <FlipCard
                 key={game.id}
                 front={
                   <Card
-                    key={game.id}
-                    image={game.thumbnail}
-                    title={game.title}
-                    category={game.genre}
+                    front
+                    gameData={game}
                   />
                 }
                 back={
                   <Card
-                    key={game.id}
-                    title={game.title}
-                    description={game.short_description}
-                    play={game.game_url}
+                    gameData={game}
+
                   />
                 }
               />

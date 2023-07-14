@@ -2,55 +2,56 @@ import React from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { FaHeart } from "react-icons/fa";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import {toggleFavoriteGame} from "@/services/favoriteGame";
+import { Game } from "@/pages";
 
 
-type Card = {
-  image?: string;
-  title?: string;
-  description?: string;
-  category?: string;
-  play?: string;
+export type Card = {
+  gameData: Game & {favorite: boolean},
+  front?: boolean;
   onClick?: () => void;
 };
 
-
 const Card: React.FC<Card> = ({
-  image,
-  title,
-  description,
-  category,
-  play,
-  onClick,
+  gameData,
+  front,
+  onClick
 }) => {
+  const {id,short_description,genre,thumbnail,title, game_url,favorite} = gameData
   const router = useRouter();
+  const authenticated = useAuthContext()
 
   const handleHeartClick = () => {
-    // Realizar ação desejada ao clicar no coração
-    router.push("/auth");
+    if(!authenticated){
+      router.push("/auth");
+      return
+    }
+    toggleFavoriteGame(authenticated.uid, id)
   };
 
   return (
     <div className="max-w-sm rounded overflow-hidden shadow-lg flex bg-blue-950 flex-col place-content-between relative">
       <div className="card-content" style={{ height: "250px" }}>
-        {image && <Image src={image} alt="img" width={700} height={700} />}
+        {thumbnail && front && <Image src={thumbnail} alt="img" width={700} height={700} />}
         <div className="px-6 py-4">
           <div className="font-bold text-xl mb-2">{title}</div>
-          <p className="text-base text-[#ffffffa2]">{description}</p>
+          {!front && <p className="text-base text-[#ffffffa2]">{short_description}</p>}
         </div>
       </div>
       <div className="px-6 pt-4 pb-2">
-        {category && (
+        {front && genre && (
           <span
             onClick={onClick}
             className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
           >
-            {category}
+            {genre}
           </span>
         )}
-        {play && (
+        {!front && game_url && (
           <a
             target="blank"
-            href={play}
+            href={game_url}
             onClick={onClick}
             className="inline-block bg-red-600 rounded-full px-3 py-1 text-sm font-semibold text-white-700 mr-2 mb-2"
           >
@@ -61,7 +62,7 @@ const Card: React.FC<Card> = ({
       <div className="absolute bottom-0 right-0 p-2">
       <button
           onClick={handleHeartClick}
-          className="absolute bottom-4 right-4 text-white"
+          className={`absolute bottom-4 right-4 ${favorite ? 'text-red-500' : 'text-white'}`}
         >
           <FaHeart size={20} />
         </button>
