@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect, useState } from "react";
 import Card from "@/components/Card";
 import Dropdown from "@/components/DropDown";
@@ -9,7 +9,8 @@ import LoadingComponent from "@/components/LoadingComponent";
 import ErrorComponent from "@/components/ErrorComponent";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { useGetFavoriteGames } from "@/services/favoriteGame";
-import { useGetRatingGames } from "@/services/rateGame";
+import { useGetRatingGames } from "@/services/ratingGame";
+import OrderButton from "@/components/OrderButton";
 
 export interface Game {
   id: number;
@@ -27,17 +28,24 @@ export interface Game {
 
 export interface ExtendedGame extends Game {
   favorite: boolean;
-  rate?: number;
+  rating?: number;
 }
 
 export default function Home() {
   const [search, setSearch] = useState<string>();
-  const authenticated = useAuthContext()
-  const favoriteGameIds = useGetFavoriteGames(authenticated?.uid);  
-  const rateGames = useGetRatingGames(authenticated?.uid);  
+  const authenticated = useAuthContext();
+  const favoriteGameIds = useGetFavoriteGames(authenticated?.uid);
+  const ratingGames = useGetRatingGames(authenticated?.uid);
 
   const [gameGenre, setGameGenre] = useState("");
-  const [filterFavorites,setFilterFavorites] = useState(false)
+  const [filterFavorites, setFilterFavorites] = useState(false);
+  const [ratingOrder, setRatingOrder] = useState<string>("OFF");
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  const toggleSidebar = () => {
+    setShowSidebar(!showSidebar);
+  };
+
   const {
     data: games,
     error,
@@ -46,7 +54,7 @@ export default function Home() {
     "https://games-test-api-81e9fb0d564a.herokuapp.com/api/data/"
   );
 
-  const sortedGames = games?.sort((a, b) => {
+  const sortGamesByTitle = games?.sort((a, b) => {
     const titleA = a.title.toUpperCase();
     const titleB = b.title.toUpperCase();
 
@@ -59,36 +67,43 @@ export default function Home() {
     return 0;
   });
 
-
-  const mapedRateGames = ((game: Game) => {
-    const findGame = rateGames?.find(rate=>rate.id === game.id)
+  const mapedRatingGames = (game: Game) => {
+    const findGame = ratingGames?.find((rating) => rating.id === game.id);
 
     return {
       ...game,
-      rate: findGame?.rate,
+      rating: findGame?.rating,
     };
-  });
+  };
 
-
-  const mapedFavoriteGames = ((game: Game) => {
+  const mapedFavoriteGames = (game: Game) => {
     const isFavorite = favoriteGameIds.includes(game.id);
     return {
       ...game,
       favorite: isFavorite,
     };
-  });
+  };
 
-  const mapedGames:ExtendedGame[] | undefined = 
-  sortedGames?.map(mapedRateGames)?.map(mapedFavoriteGames)
+  const gamesWithRatingAndFavorites: ExtendedGame[] | undefined = sortGamesByTitle
+    ?.map(mapedRatingGames)
+    ?.map(mapedFavoriteGames);
 
-  const filterByFavorites = (game: Game & {favorite:boolean}) => {
+  if (ratingOrder !== "OFF") {
+    gamesWithRatingAndFavorites?.sort((a, b) => {
+      if (a.rating === undefined) return 1;
+      if (b.rating === undefined) return -1;
+      return ratingOrder === "ASC" ? a.rating - b.rating : b.rating - a.rating;
+    });
+  }
+
+  const filterByFavorites = (game: Game & { favorite: boolean }) => {
     if (filterFavorites) {
       return game.favorite;
     }
     return game;
-  }
-  
-  const filterByGenreOrSearch = (game: Game) =>{
+  };
+
+  const filterByGenreOrSearch = (game: Game) => {
     if (!gameGenre && !search) {
       return game;
     }
@@ -96,11 +111,11 @@ export default function Home() {
       return game.title.toLowerCase().includes(search.trim() || "");
     }
     return game.genre === gameGenre;
-  }
+  };
 
-  const filteredGames = 
-  mapedGames?.filter(filterByFavorites).filter(filterByGenreOrSearch);
-
+  const filteredGames = gamesWithRatingAndFavorites
+    ?.filter(filterByFavorites)
+    .filter(filterByGenreOrSearch);
 
   useEffect(() => {
     if (gameGenre) setSearch("");
@@ -116,18 +131,12 @@ export default function Home() {
       .sort() || []),
   ];
 
-  const [showSidebar, setShowSidebar] = useState(false);
-
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar);
-  };
-
   const renderBody = () => {
     if (isLoading) {
-      return  <LoadingComponent />;
+      return <LoadingComponent />;
     }
     if (error) {
-      return <ErrorComponent error={error}/>;
+      return <ErrorComponent error={error} />;
     }
 
     return (
@@ -141,25 +150,24 @@ export default function Home() {
               }
               resetFilter={search !== ""}
             />
-            <button className="mr-2" onClick={()=>setFilterFavorites(!filterFavorites)}>Favorites</button>
+            <span className="ml-2">
+              <OrderButton onClick={(order) => setRatingOrder(order)}>
+                Rating
+              </OrderButton>
+            </span>
+            <button
+              className="mr-2"
+              onClick={() => setFilterFavorites(!filterFavorites)}
+            >
+              Favorites
+            </button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-max">
             {filteredGames?.map((game) => (
-              
               <FlipCard
                 key={game.id}
-                front={
-                  <Card
-                    front
-                    gameData={game}
-                  />
-                }
-                back={
-                  <Card
-                    gameData={game}
-
-                  />
-                }
+                front={<Card front gameData={game} />}
+                back={<Card gameData={game} />}
               />
             ))}
           </div>

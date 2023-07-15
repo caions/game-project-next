@@ -6,7 +6,7 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import { toggleFavoriteGame } from "@/services/favoriteGame";
 import { ExtendedGame } from "@/pages";
 import { FaStar } from "react-icons/fa";
-import { saveRating } from "@/services/rateGame";
+import { saveRating } from "@/services/ratingGame";
 
 export type Card = {
   gameData: ExtendedGame;
@@ -23,11 +23,11 @@ const Card: React.FC<Card> = ({ gameData, front, onClick }) => {
     title,
     game_url,
     favorite,
-    rate,
+    rating,
   } = gameData;
   const router = useRouter();
   const authenticated = useAuthContext();
-  const [rateState, setRateState] = useState(0);
+  const [ratingState, setRatingState] = useState(0);
 
   const handleHeartClick = () => {
     if (!authenticated) {
@@ -38,13 +38,13 @@ const Card: React.FC<Card> = ({ gameData, front, onClick }) => {
   };
 
   const handleRatingClick = (selectedRating: number) => {
-    const rate = selectedRating === rateState ? 0 : selectedRating;
+    const rating = selectedRating === ratingState ? 0 : selectedRating;
     if (!authenticated?.uid) {
       router.push("/auth");
       return;
     }
-    saveRating(authenticated.uid, gameId, rate);
-    setRateState(rate);
+    saveRating(authenticated.uid, gameId, rating);
+    setRatingState(rating);
   };
 
   return (
@@ -62,7 +62,7 @@ const Card: React.FC<Card> = ({ gameData, front, onClick }) => {
               size={30}
               key={star}
               className={`cursor-pointer mx-1 ${
-                rate && rate >= star ? "text-yellow-500" : "text-gray-400"
+                rating && rating >= star ? "text-yellow-500" : "text-gray-400"
               }`}
               onClick={() => handleRatingClick(star)}
             />
