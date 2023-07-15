@@ -8,8 +8,8 @@ import Navbar from "@/components/NabBar";
 import LoadingComponent from "@/components/LoadingComponent";
 import ErrorComponent from "@/components/ErrorComponent";
 import { useAuthContext } from "@/hooks/useAuthContext";
-import { Unsubscribe } from "firebase/firestore";
 import { useGetFavoriteGames } from "@/services/favoriteGame";
+import { useGetRatingGames } from "@/services/rateGame";
 
 export interface Game {
   id: number;
@@ -25,10 +25,17 @@ export interface Game {
   freetogame_profile_url: string;
 }
 
+export interface ExtendedGame extends Game {
+  favorite: boolean;
+  rate?: number;
+}
+
 export default function Home() {
   const [search, setSearch] = useState<string>();
   const authenticated = useAuthContext()
   const favoriteGameIds = useGetFavoriteGames(authenticated?.uid);  
+  const rateGames = useGetRatingGames(authenticated?.uid);  
+
   const [gameGenre, setGameGenre] = useState("");
   const [filterFavorites,setFilterFavorites] = useState(false)
   const {
@@ -52,13 +59,27 @@ export default function Home() {
     return 0;
   });
 
-  const mapedGames = sortedGames?.map(game => {
+
+  const mapedRateGames = ((game: Game) => {
+    const findGame = rateGames?.find(rate=>rate.id === game.id)
+
+    return {
+      ...game,
+      rate: findGame?.rate,
+    };
+  });
+
+
+  const mapedFavoriteGames = ((game: Game) => {
     const isFavorite = favoriteGameIds.includes(game.id);
     return {
       ...game,
       favorite: isFavorite,
     };
   });
+
+  const mapedGames:ExtendedGame[] | undefined = 
+  sortedGames?.map(mapedRateGames)?.map(mapedFavoriteGames)
 
   const filterByFavorites = (game: Game & {favorite:boolean}) => {
     if (filterFavorites) {
