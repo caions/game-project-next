@@ -1,6 +1,7 @@
 import { db } from '@/config/firebase';
 import { collection, query, where, deleteDoc, doc, getDoc, setDoc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export const toggleFavoriteGame = async (userId: string, gameId: number) => {
   try {
@@ -11,12 +12,13 @@ export const toggleFavoriteGame = async (userId: string, gameId: number) => {
 
     if (documentSnapshot.exists()) {
       await deleteDoc(docRef);
+      toast.success("Game unfavorited successfully!");
       return;
     }
     await setDoc(docRef, { userId, gameId });
-
+    toast.success("Game favorited successfully!");
   } catch (error) {
-    console.error("Erro ao favoritar/desfavoritar jogo:", error);
+    toast.error("Error favoriting/unfavoriting game");
   }
 };
 
@@ -29,8 +31,12 @@ export const useGetFavoriteGames = (userId?: string) => {
       const queryRef = query(favoritesRef, where("userId", "==", userId));
 
       const unsubscribe = onSnapshot(queryRef, (snapshot) => {
-        const favoritesIds = snapshot.docs.map((doc) => doc.data().gameId);
-        setFavoriteGames(favoritesIds);
+        try {
+          const favoritesIds = snapshot.docs.map((doc) => doc.data().gameId);
+          setFavoriteGames(favoritesIds);
+        } catch (error) {
+          toast.error("Error retrieving your favorite games");
+        }
       });
 
       return () => {
