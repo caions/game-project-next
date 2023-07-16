@@ -84,9 +84,8 @@ export default function Home() {
     };
   };
 
-  const gamesWithRatingAndFavorites: ExtendedGame[] | undefined = sortGamesByTitle
-    ?.map(mapedRatingGames)
-    ?.map(mapedFavoriteGames);
+  const gamesWithRatingAndFavorites: ExtendedGame[] | undefined =
+    sortGamesByTitle?.map(mapedRatingGames)?.map(mapedFavoriteGames);
 
   if (ratingOrder !== "OFF") {
     gamesWithRatingAndFavorites?.sort((a, b) => {
@@ -142,34 +141,39 @@ export default function Home() {
     return (
       <>
         <main className="flex flex-col items-center justify-between p-24 pt-4">
-          <div className="text-sm lg:flex-grow self-end mb-5 hidden lg:block">
-            <Dropdown
-              option={gamesGenres}
-              selectedValue={(option) =>
-                setGameGenre(option === "Genres" ? "" : option)
-              }
-              resetFilter={search !== ""}
-            />
-            <span className="ml-2">
-              <OrderButton onClick={(order) => setRatingOrder(order)}>
-                Rating
-              </OrderButton>
-            </span>
-            <button
-              className="mr-2"
-              onClick={() => setFilterFavorites(!filterFavorites)}
-            >
-              Favorites
-            </button>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-max">
-            {filteredGames?.map((game) => (
-              <FlipCard
-                key={game.id}
-                front={<Card front gameData={game} />}
-                back={<Card gameData={game} />}
+          <div>
+            <div className="text-sm lg:flex justify-end self-end mb-5 hidden">
+              <Dropdown
+                option={gamesGenres}
+                selectedValue={(option) =>
+                  setGameGenre(option === "Genres" ? "" : option)
+                }
+                resetFilter={search !== ""}
               />
-            ))}
+                <OrderButton onClick={(order) => setRatingOrder(order)}>
+                  Rating
+                </OrderButton>
+              <button
+                className={`${
+                  filterFavorites
+                    ? "bg-red-500 text-gray-100"
+                    : "bg-gray-500 text-gray-100"
+                } font-medium mr-4 px-4 py-2 rounded-md`}
+                onClick={() => setFilterFavorites(!filterFavorites)}
+              >
+                Favorites
+              </button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-max">
+              {filteredGames?.map((game) => (
+                <FlipCard
+                  key={game.id}
+                  gameData={game}
+                  front={<Card front gameData={game} />}
+                  back={<Card gameData={game} />}
+                />
+              ))}
+            </div>
           </div>
         </main>
       </>

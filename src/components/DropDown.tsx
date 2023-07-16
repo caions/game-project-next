@@ -68,7 +68,7 @@ const Dropdown: React.FC<DropdownProps> = ({ option, selectedValue, resetFilter 
         <div className="origin-top-right absolute right-0 mt-2 w-full rounded-md shadow-lg">
           <div
             className="rounded-md bg-gray-900 shadow-xs relative z-10"
-            style={{ maxHeight: "200px", overflowY: "auto" }}
+            style={{ maxHeight: "320px", overflowY: "auto" }}
           >
             <div
               className="py-1"

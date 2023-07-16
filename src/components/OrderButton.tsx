@@ -37,9 +37,7 @@ const OrderButton: React.FC<OrderButtonProps> = ({
 
   return (
     <button
-      className={`bg-${
-        order !== "OFF" ? "yellow" : "gray"
-      }-500 text-gray-700 font-medium px-4 py-2 rounded-md ${className}`}
+      className={`${order !== 'OFF' ? 'bg-yellow-500 text-gray-800' : 'bg-gray-500 text-gray-100'} min-w-[90px] font-medium mx-3 px-4 py-2 rounded-md ${className}`}
       onClick={handleClick}
     >
       {children}

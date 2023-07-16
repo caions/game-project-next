@@ -3,6 +3,7 @@ import logoApp from "../../public/logo-appmasters.svg";
 import { auth } from "@/config/firebase";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 interface NavbarProps {
   search: string | undefined;
@@ -30,10 +31,10 @@ const Navbar: React.FC<NavbarProps> = ({
     auth
       .signOut()
       .then(() => {
-        console.log("deslogado");
+        toast.success("Logout successful!");
       })
       .catch((error) => {
-        console.log(error);
+        toast.error("An error occurred during logout. Please try again.");
       });
   };
 

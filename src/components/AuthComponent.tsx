@@ -23,13 +23,13 @@ export const AuthComponent = () => {
     <>
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <Image
+{/*           <Image
             width={0}
             height={0}
             className="mx-auto h-10 w-auto"
             src={""}
             alt="Your Company"
-          />
+          /> */}
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-white">
             {registerPage ? "Create an account" : "Login to your account"}
           </h2>
@@ -52,7 +52,7 @@ export const AuthComponent = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   value={email}
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -65,14 +65,6 @@ export const AuthComponent = () => {
                 >
                   Password
                 </label>
-                <div className="text-sm">
-                  <a
-                    href="#"
-                    className="font-semibold text-indigo-600 hover:text-indigo-500"
-                  >
-                    {!registerPage && "Forgot password?"}
-                  </a>
-                </div>
               </div>
               <div className="mt-2">
                 <input
@@ -82,7 +74,7 @@ export const AuthComponent = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   value={password}
                   required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 py-1.5 pl-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -104,7 +96,7 @@ export const AuthComponent = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                     required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0  pl-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
