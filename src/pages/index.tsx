@@ -142,27 +142,31 @@ export default function Home() {
       <>
         <main className="flex flex-col items-center justify-between p-24 pt-4">
           <div>
-            <div className="text-sm lg:flex justify-end self-end mb-5 hidden">
-              <Dropdown
-                option={gamesGenres}
-                selectedValue={(option) =>
-                  setGameGenre(option === "Genres" ? "" : option)
-                }
-                resetFilter={search !== ""}
-              />
+            <div className="lg:flex justify-end self-end">
+              <div className="text-sm lg:flex justify-end self-end mb-5 hidden">
+                <Dropdown
+                  option={gamesGenres}
+                  selectedValue={(option) =>
+                    setGameGenre(option === "Genres" ? "" : option)
+                  }
+                  resetFilter={search !== ""}
+                />
+              </div>
+              <div className="text-sm flex lg:justify-end justify-center self-end mb-5">
                 <OrderButton onClick={(order) => setRatingOrder(order)}>
                   Rating
                 </OrderButton>
-              <button
-                className={`${
-                  filterFavorites
-                    ? "bg-red-500 text-gray-100"
-                    : "bg-gray-500 text-gray-100"
-                } font-medium mr-4 px-4 py-2 rounded-md`}
-                onClick={() => setFilterFavorites(!filterFavorites)}
-              >
-                Favorites
-              </button>
+                <button
+                  className={`${
+                    filterFavorites
+                      ? "bg-red-500 text-gray-100"
+                      : "bg-gray-500 text-gray-100"
+                  } font-medium mr-4 px-4 py-2 rounded-md`}
+                  onClick={() => setFilterFavorites(!filterFavorites)}
+                >
+                  Favorites
+                </button>
+              </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 w-max">
               {filteredGames?.map((game) => (
