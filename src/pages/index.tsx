@@ -11,6 +11,7 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import { useGetFavoriteGames } from "@/services/favoriteGame";
 import { useGetRatingGames } from "@/services/ratingGame";
 import OrderButton from "@/components/OrderButton";
+import NoResultsComponent from "@/components/NoResultsComponents";
 
 export interface Game {
   id: number;
@@ -135,6 +136,9 @@ export default function Home() {
     }
     if (error) {
       return <ErrorComponent error={error} />;
+    }
+    if(filteredGames?.length === 0){
+      return <NoResultsComponent message="No results found."/>
     }
 
     return (
