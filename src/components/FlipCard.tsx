@@ -3,7 +3,7 @@ import { ExtendedGame } from "@/pages";
 import { toggleFavoriteGame } from "@/services/favoriteGame";
 import { saveRating } from "@/services/ratingGame";
 import { useRouter } from "next/router";
-import React, { ReactNode, memo, useState } from "react";
+import React, { ReactNode, memo, useEffect, useState } from "react";
 import { FaHeart, FaStar } from "react-icons/fa";
 
 type FlipCardProps = {
@@ -16,6 +16,16 @@ type FlipCardProps = {
 const FlipCard: React.FC<FlipCardProps> = memo(({ front, back, gameData }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const { id: gameId, favorite, rating } = gameData;
+  const router = useRouter();
+  const authenticated = useAuthContext();
+  const [ratingState, setRatingState] = useState(rating);
+  const [isClicked, setIsClicked] = useState(false);
+
+  useEffect(()=>{
+    if(!authenticated){
+      setRatingState(0)
+    }
+  },[authenticated])
 
   const handleClick = () => {
     setIsFlipped(!isFlipped);
@@ -24,11 +34,6 @@ const FlipCard: React.FC<FlipCardProps> = memo(({ front, back, gameData }) => {
   const handleFooterClick = (event: React.MouseEvent) => {
     event.stopPropagation();
   };
-
-  const router = useRouter();
-  const authenticated = useAuthContext();
-  const [ratingState, setRatingState] = useState(rating);
-  const [isClicked, setIsClicked] = useState(false);
 
   const handleHeartClick = () => {
     setIsClicked(true);

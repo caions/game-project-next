@@ -152,7 +152,7 @@ export default function Home() {
                   resetFilter={search !== ""}
                 />
               </div>
-              <div className="text-sm flex lg:justify-end justify-center self-end mb-5">
+              <div className={`text-sm flex lg:justify-end justify-center self-end mb-5 ${!authenticated && 'hidden'}`}>
                 <OrderButton onClick={(order) => setRatingOrder(order)}>
                   Rating
                 </OrderButton>
