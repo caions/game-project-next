@@ -19,9 +19,13 @@ export const useFireBaseAuth = (email: string, password: string) => {
         toast.success("Account created successfully!")
         router.push("/");
       })
-      .catch((error) => {
+      .catch((error:FirebaseError) => {
         if(error.code === "auth/email-already-in-use"){
           toast.warning("Email already in use. Please use a different email or try logging in.");
+          return
+        }
+        if(error.code === "auth/weak-password"){
+          toast.warning("Password should be at least 6 characters");
           return
         }
         toast.error(`Internal server error: ${error.code}`)

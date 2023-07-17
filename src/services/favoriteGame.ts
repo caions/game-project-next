@@ -44,6 +44,8 @@ export const useGetFavoriteGames = (userId?: string) => {
           unsubscribe();
         }
       };
+    } else {
+      setFavoriteGames([]);
     }
   }, [userId]);
 
