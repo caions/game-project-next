@@ -36,7 +36,6 @@ export default function Home() {
   const authenticated = useAuthContext();
   const favoriteGameIds = useGetFavoriteGames(authenticated?.uid);
   const ratingGames = useGetRatingGames(authenticated?.uid);
-
   const [gameGenre, setGameGenre] = useState("");
   const [filterFavorites, setFilterFavorites] = useState(false);
   const [ratingOrder, setRatingOrder] = useState<string>("OFF");

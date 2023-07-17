@@ -1,5 +1,5 @@
 import { db } from '@/config/firebase';
-import { collection, query, where, doc, getDoc, setDoc, onSnapshot, updateDoc, deleteDoc } from "firebase/firestore";
+import { collection, query, where, doc, getDoc, setDoc, onSnapshot, updateDoc, deleteDoc, getDocs } from "firebase/firestore";
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -53,4 +53,23 @@ export const useGetRatingGames = (userId?: string) => {
   }, [userId]);
 
   return ratingGames;
+};
+
+export const getGameRatings = async (gameId: number) => {
+  try {
+    const ratingsRef = collection(db, "ratings");
+    const queryRef = query(ratingsRef, where("gameId", "==", gameId));
+    const snapshot = await getDocs(queryRef);
+    const ratings = snapshot.docs.map((doc) => doc.data().rating);
+    return ratings;
+  } catch (error) {
+    toast.error("Error retrieving game ratings");
+    throw error;
+  }
+};
+
+export const calculateTotalRating = (gameRatings: Array<number>) => {
+    const totalRating = gameRatings.reduce((sum, rating) => sum + rating, 0);
+    const averageRating = totalRating / gameRatings.length;
+    return averageRating.toFixed(1);
 };

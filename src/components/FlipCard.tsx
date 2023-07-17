@@ -1,7 +1,11 @@
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { ExtendedGame } from "@/pages";
 import { toggleFavoriteGame } from "@/services/favoriteGame";
-import { saveRating } from "@/services/ratingGame";
+import {
+  calculateTotalRating,
+  saveRating,
+  getGameRatings,
+} from "@/services/ratingGame";
 import { useRouter } from "next/router";
 import React, { ReactNode, memo, useEffect, useState } from "react";
 import { FaHeart, FaStar } from "react-icons/fa";
@@ -20,12 +24,19 @@ const FlipCard: React.FC<FlipCardProps> = memo(({ front, back, gameData }) => {
   const authenticated = useAuthContext();
   const [ratingState, setRatingState] = useState(rating);
   const [isClicked, setIsClicked] = useState(false);
+  const [totalRatings, setTotalRatings] = useState<number[]>([]);
 
-  useEffect(()=>{
-    if(!authenticated){
-      setRatingState(0)
+  useEffect(() => {
+    if (!authenticated) {
+      setRatingState(0);
     }
-  },[authenticated])
+  }, [authenticated]);
+
+  useEffect(() => {
+    getGameRatings(gameId).then((total: number[]) => {
+      setTotalRatings(total);
+    });
+  }, [rating]);
 
   const handleClick = () => {
     setIsFlipped(!isFlipped);
@@ -47,7 +58,7 @@ const FlipCard: React.FC<FlipCardProps> = memo(({ front, back, gameData }) => {
     toggleFavoriteGame(authenticated.uid, gameId);
   };
 
-  const handleMouseEnter = (star:number) => {
+  const handleMouseEnter = (star: number) => {
     setRatingState(star);
   };
 
@@ -87,17 +98,25 @@ const FlipCard: React.FC<FlipCardProps> = memo(({ front, back, gameData }) => {
                   size={30}
                   key={star}
                   className={`cursor-pointer text-gray-500 transition ease-in-out ${
-                    ratingState && ratingState >= star ? 'text-yellow-500' : ''
+                    ratingState && ratingState >= star ? "text-yellow-500" : ""
                   }`}
-/*                   onMouseEnter={() => handleMouseEnter(star)}
+                  /*                   onMouseEnter={() => handleMouseEnter(star)}
                   onMouseLeave={handleMouseLeave} */
                   onClick={() => handleRatingClick(star)}
                 />
               ))}
+              <div className="ml-3 pt-1">
+                {totalRatings.length === 0
+                  ? 0
+                  : calculateTotalRating(totalRatings)}{" "}
+                ( {totalRatings.length} )
+              </div>
             </div>
             <div className="pr-3">
               <button
-                className={`text-gray-500 transition duration-300 ease-in-out ${isClicked ? "scale-125" : ""}`}
+                className={`text-gray-500 transition duration-300 ease-in-out ${
+                  isClicked ? "scale-125" : ""
+                }`}
               >
                 <FaHeart
                   onClick={handleHeartClick}
