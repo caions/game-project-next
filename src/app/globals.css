@@ -5,7 +5,22 @@
 :root {
   --foreground: #1a1b1e;
   --text: #ffffff
+  --color-primary: #1E2A38; /* Cor principal: Azul Escuro */
+  --color-secondary: #30475E; /* Cor secundária: Cinza Azulado */
+  --color-accent: #F05454; /* Cor de destaque: Vermelho Suave */
+  --color-background: #F5F5F5; /* Cor de fundo: Cinza Claro */
+  --color-text-primary: #FFFFFF; /* Cor do texto principal: Branco */
+  --color-text-secondary: #A9A9A9; /* Cor do texto secundário: Cinza */
+  --color-button-bg: #30475E; /* Cor do fundo dos botões: Cinza Azulado */
+  --color-button-text: #FFFFFF; /* Cor do texto dos botões: Branco */
+  --color-card-bg: #1E2A38; /* Cor do fundo dos cartões: Azul Escuro */
+  --color-card-text: #FFFFFF; /* Cor do texto dos cartões: Branco */
+  --color-heart: #F05454; /* Cor do coração (favoritos): Vermelho Suave */
+  --color-star: #FFD700; /* Cor das estrelas de rating: Amarelo Dourado */
+  --color-input-bg: #FFFFFF; /* Cor do fundo dos inputs: Branco */
+  --color-input-text: #30475E; /* Cor do texto dos inputs: Cinza Azulado */
 }
+
 
 body {
   color: var(--text);

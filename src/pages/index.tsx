@@ -4,7 +4,7 @@ import Card from "@/components/Card";
 import Dropdown from "@/components/DropDown";
 import useApi from "@/hooks/useApi";
 import FlipCard from "@/components/FlipCard";
-import Navbar from "@/components/NabBar";
+import Navbar from "@/components/NavBar";
 import LoadingComponent from "@/components/LoadingComponent";
 import ErrorComponent from "@/components/ErrorComponent";
 import { useAuthContext } from "@/hooks/useAuthContext";
@@ -151,15 +151,19 @@ export default function Home() {
                   resetFilter={search !== ""}
                 />
               </div>
-              <div className={`text-sm flex lg:justify-end justify-center self-end mb-5 ${!authenticated && 'hidden'}`}>
+              <div
+                className={`text-sm flex lg:justify-end justify-center self-end mb-5 ${
+                  !authenticated && "hidden"
+                }`}
+              >
                 <OrderButton onClick={(order) => setRatingOrder(order)}>
                   Rating
                 </OrderButton>
                 <button
                   className={`${
                     filterFavorites
-                      ? "bg-red-500 text-gray-100"
-                      : "bg-gray-500 text-gray-100"
+                      ? "bg-[var(--color-accent)] text-[var(--color-text-primary)]"
+                      : "bg-[var(--color-secondary)] text-[var(--color-text-primary)]"
                   } font-medium mr-4 px-4 py-2 rounded-md`}
                   onClick={() => setFilterFavorites(!filterFavorites)}
                 >

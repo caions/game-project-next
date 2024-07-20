@@ -89,7 +89,7 @@ const FlipCard: React.FC<FlipCardProps> = memo(({ front, back, gameData }) => {
         <div className="absolute backface-hidden w-full">
           {front}
           <div
-            className="absolute w-[300px] lg:w-[385px] -bottom-[3px] h-[57px] cursor-default flex justify-between items-center"
+            className="absolute w-[300px] lg:w-[385px] -bottom-[3px] h-[57px] cursor-default flex justify-between items-center bg-[var(--color-card-bg)] bg-opacity-75 rounded-b-lg"
             onClick={handleFooterClick}
           >
             <div className="flex pl-3">
@@ -97,15 +97,15 @@ const FlipCard: React.FC<FlipCardProps> = memo(({ front, back, gameData }) => {
                 <FaStar
                   size={30}
                   key={star}
-                  className={`cursor-pointer text-gray-500 transition ease-in-out ${
-                    ratingState && ratingState >= star ? "text-yellow-500" : ""
+                  className={`cursor-pointer transition ease-in-out ${
+                    ratingState && ratingState >= star
+                      ? "text-[var(--color-star)]"
+                      : "text-[var(--color-button-text)]"
                   }`}
-                  /*                   onMouseEnter={() => handleMouseEnter(star)}
-                  onMouseLeave={handleMouseLeave} */
                   onClick={() => handleRatingClick(star)}
                 />
               ))}
-              <div className="ml-3 pt-1">
+              <div className="ml-3 pt-1 text-[var(--color-text-primary)]">
                 {totalRatings.length === 0
                   ? 0
                   : calculateTotalRating(totalRatings)}{" "}
@@ -114,7 +114,7 @@ const FlipCard: React.FC<FlipCardProps> = memo(({ front, back, gameData }) => {
             </div>
             <div className="pr-3">
               <button
-                className={`text-gray-500 transition duration-300 ease-in-out ${
+                className={`text-[var(--color-heart)] transition duration-300 ease-in-out ${
                   isClicked ? "scale-125" : ""
                 }`}
               >
@@ -122,7 +122,9 @@ const FlipCard: React.FC<FlipCardProps> = memo(({ front, back, gameData }) => {
                   onClick={handleHeartClick}
                   size={30}
                   className={`cursor-pointer ${
-                    favorite ? "text-red-600" : "text-gray-400"
+                    favorite
+                      ? "text-[var(--color-heart)]"
+                      : "text-[var(--color-text-secondary)]"
                   }`}
                 />
               </button>

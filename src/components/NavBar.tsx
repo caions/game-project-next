@@ -1,5 +1,5 @@
 import Image from "next/image";
-import logoApp from "../../public/logo-appmasters.svg";
+import logoApp from "../../public/next-games.png";
 import { auth } from "@/config/firebase";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { useRouter } from "next/router";
@@ -39,23 +39,16 @@ const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <nav className="flex items-center md:justify-between justify-center flex-wrap bg-blue-950 px-24 py-1">
+    <nav className="flex items-center md:justify-between justify-center flex-wrap bg-[var(--color-primary)] px-24 py-1">
       <div className="flex items-center flex-shrink-0 text-white mr-6 w-60 mt-1">
-        <Image
-          style={{
-            filter: "grayscale(1) brightness(0) invert(1)",
-          }}
-          priority
-          src={logoApp}
-          alt="logo"
-        />
+        <Image priority src={logoApp} alt="logo" width={150} height={50} />
       </div>
-      <div className="flex items-center  my-3">
+      <div className="flex items-center my-3">
         <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto justify-end">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="shadow appearance-none border rounded min-w-[240px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded min-w-[240px] py-2 px-3 text-[var(--color-input-text)] leading-tight focus:outline-none focus:shadow-outline"
             type="text"
             placeholder="Search a game"
           />
@@ -63,7 +56,7 @@ const Navbar: React.FC<NavbarProps> = ({
         <div className="absolute top-4 right-8">
           <div className="block lg:hidden">
             <button
-              className="flex items-center px-3 py-2 border rounded text-blue-200 border-blue-400 hover:text-white hover:border-white"
+              className="flex items-center px-3 py-2 border rounded text-[var(--color-text-primary)] border-[var(--color-primary)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-text-primary)]"
               onClick={toggleSidebar}
             >
               <svg
@@ -77,12 +70,13 @@ const Navbar: React.FC<NavbarProps> = ({
             </button>
           </div>
           <div
-            className={`fixed z-50 inset-0 lg:hidden
-             ${showSidebar ? "" : "hidden"}`}
+            className={`fixed z-50 inset-0 lg:hidden ${
+              showSidebar ? "" : "hidden"
+            }`}
           >
             <div className="fixed inset-0 bg-black/20 backdrop-blur-sm"></div>
             <div
-              className={`fixed top-4 right-4 w-full max-w-[17rem] bg-white rounded-lg shadow-lg p-6 text-base font-semibold text-slate-900 h-[87vh] overflow-scroll`}
+              className={`fixed top-4 right-4 w-full max-w-[17rem] bg-[var(--color-input-bg)] rounded-lg shadow-lg p-6 text-base font-semibold text-slate-900 h-[87vh] overflow-scroll`}
             >
               <button
                 onClick={toggleSidebar}
@@ -107,15 +101,14 @@ const Navbar: React.FC<NavbarProps> = ({
                 {gamesGenres.map((game, index) => (
                   <li
                     key={index}
-                    className={`cursor-pointer 
-                      ${
-                        gameGenre === game || (!gameGenre && index === 0)
-                          ? "text-sky-500"
-                          : ""
-                      }`}
+                    className={`cursor-pointer ${
+                      gameGenre === game || (!gameGenre && index === 0)
+                        ? "text-[var(--color-accent)]"
+                        : ""
+                    }`}
                   >
                     <span
-                      className={`hover:text-sky-500`}
+                      className="hover:text-[var(--color-accent)]"
                       onClick={() => {
                         setGameGenre(game === "Genres" ? "" : game);
                       }}
@@ -127,13 +120,25 @@ const Navbar: React.FC<NavbarProps> = ({
               </ul>
             </div>
           </div>
-        </div>             
+        </div>
       </div>
-      <div className="flex items-center  my-3">
-        {!!authenticated ? 
-          <button onClick={handleLogout}>Logout</button>
-        : <button onClick={()=>router.push('/auth')}>Login</button>}
-        </div>   
+      <div className="flex items-center my-3">
+        {!!authenticated ? (
+          <button
+            onClick={handleLogout}
+            className="text-[var(--color-button-text)] bg-[var(--color-button-bg)] hover:bg-[var(--color-secondary)] px-4 py-2 rounded"
+          >
+            Logout
+          </button>
+        ) : (
+          <button
+            onClick={() => router.push("/auth")}
+            className="text-[var(--color-button-text)] bg-[var(--color-button-bg)] hover:bg-[var(--color-secondary)] px-4 py-2 rounded"
+          >
+            Login
+          </button>
+        )}
+      </div>
     </nav>
   );
 };
