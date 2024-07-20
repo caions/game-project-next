@@ -1,6 +1,6 @@
 ## Interface
-<img width="829" alt="image" src="https://github.com/caions/game-project-next/assets/44811629/0539961e-48eb-4b80-9389-a52890795fbb">
-<img width="220" alt="image" src="https://github.com/caions/game-project-next/assets/44811629/e747901b-fbb6-4069-a708-cd322dae6e57">
+<img width="829" alt="image" src="https://github.com/user-attachments/assets/95752ec2-4d38-4b18-913f-1140dda7d40f">
+
 
 ## Link da aplicação hospedada na versel
 ```bash
