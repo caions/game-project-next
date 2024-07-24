@@ -11,6 +11,7 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import { useGetFavoriteGames } from "@/services/favoriteGame";
 import { useGetRatingGames } from "@/services/ratingGame";
 import OrderButton from "@/components/OrderButton";
+import mockedGameList from "@/mock/jsonData.json";
 
 export interface Game {
   id: number;
@@ -45,13 +46,7 @@ export default function Home() {
     setShowSidebar(!showSidebar);
   };
 
-  const {
-    data: games,
-    error,
-    isLoading,
-  } = useApi<Game[]>(
-    "https://games-test-api-81e9fb0d564a.herokuapp.com/api/data/"
-  );
+  const { data: games, error, isLoading } = mockedGameList;
 
   const sortGamesByTitle = games?.sort((a, b) => {
     const titleA = a.title.toUpperCase();
@@ -134,7 +129,7 @@ export default function Home() {
       return <LoadingComponent />;
     }
     if (error) {
-      return <ErrorComponent error={error} />;
+      return <ErrorComponent error={"error"} />;
     }
 
     return (
